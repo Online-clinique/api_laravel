@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\EnsureAuthenticated;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'admin'
-], function ($router) {
-    Route::get('/', 'userController@user');
-    Route::post('/newmedic', 'userController@gentoken');
-    Route::post('/decode', 'userController@decodeJwt');
+// Private  Routes
+Route::middleware('checkauth')->group(function () {
+    Route::get('/admin', 'AdminController@index');
+    Route::post('/admin', 'AdminController@store');
+    Route::get('/admin/{id}', 'AdminController@show');
 });
+
+// Public Routes
