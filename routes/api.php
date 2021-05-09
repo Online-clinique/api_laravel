@@ -21,8 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group([
     'middleware' => 'api',
-    'prefix' => 'user'
+    'prefix' => 'admin'
 ], function ($router) {
     Route::get('/', 'userController@user');
-    Route::post('/name', 'userController@gentoken');
+    Route::post('/newmedic', 'userController@gentoken');
+    Route::post('/decode', 'userController@decodeJwt');
 });
