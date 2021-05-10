@@ -22,9 +22,24 @@ use App\Http\Middleware\EnsureAuthenticated;
 
 // Private  Routes
 Route::middleware('checkauth')->group(function () {
+
+    // Admin CR
     Route::get('/admin', 'AdminController@index');
     Route::post('/admin', 'AdminController@store');
+
+    
+    // Get admin user
+    Route::get('/admin/self', 'AdminController@self');
+
+    // GET ONE ADMIN
     Route::get('/admin/{id}', 'AdminController@show');
+    
+
+    // Submit new Doctor
+    Route::post('/medic/doc', 'MedicController@requestNewMedic');
 });
 
 // Public Routes
+
+Route::post('/admin/login', 'AdminController@SignAdmin');
+Route::get('/medic/verify/{id}', 'MedicController@validateRequestEmail');

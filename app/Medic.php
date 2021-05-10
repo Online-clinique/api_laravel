@@ -3,17 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
 
-class Medic extends Authenticatable implements JWTSubject
+class Medic extends Model
 {
     //
-    use Notifiable;
+    // use Notifiable;
+
+    use \App\Http\Traits\UsesUuid;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'added_by', 'request_hash'
     ];
 
     /**
@@ -40,14 +39,9 @@ class Medic extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
-    /**
-     * @return array
-     */
-    public function  getJWTCustomClaims() {
-        return [];
-    }
 
-    public function getAuthPassword() {
-        return '$2y$10$HcshwbKCphwhSJTU6feKMe6ZbOp.bbRhrA0hDIwTGK8X/CpIYfbzC';
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'added_by');
     }
 }

@@ -15,12 +15,12 @@ class CreateHorairesTable extends Migration
     {
         Schema::create('horaires', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->uuid('medic_id');
             $table->string('slug');
             $table->string('value');
-
+            
             // Foreign key
-
+            
+            $table->uuid('medic_id');
             $table->foreign('medic_id')->references('id')->on('medic');
             $table->timestamps();
         });

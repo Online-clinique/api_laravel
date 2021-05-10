@@ -20,12 +20,12 @@ class EnsureAuthenticated
             $cookie_value = base64_decode($request->cookie('auth:token'));
             
             try {
-                $payload = JWT::decode($cookie_value, env('JWT_SECRET'), array('HS256'));
+                $payload = JWT::decode(json_decode($cookie_value)->jwt, env('JWT_SECRET'), array('HS256'));
     
                 // print_r(gettype($is_admin));
                 // return;
                 // print_r($payload);
-                $request->merge((array) $payload);
+                $request->merge(['currentuser' => $payload]);
 
             } catch (\Throwable $th) {
                 //throw $th;
@@ -36,7 +36,11 @@ class EnsureAuthenticated
                 ], 401);
             }
         } else {
-            $request->merge(['currentuser' => '']);
+            // $request->merge(['currentuser' => NULL]);
+            return response()->json([
+                "status" => 401,
+                "message" => "Resource Requires Authentication"
+            ], 401);
         }
         
         return $next($request);

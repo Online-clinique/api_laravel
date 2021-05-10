@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
+use App\Medic;
 
 class Admin extends Model
 {
@@ -13,6 +15,13 @@ class Admin extends Model
         "id",
         "username",
         "full_name",
-        "admin"
+        "admin",
+        "password"
     ];
+
+    protected $hidden = array('password');
+
+    public function setPasswordAttribute($raw) {
+        $this->attributes['password'] = Hash::make($raw);
+    }
 }
