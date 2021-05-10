@@ -21,7 +21,7 @@ class CreateHorairesTable extends Migration
             // Foreign key
             
             $table->uuid('medic_id');
-            $table->foreign('medic_id')->references('id')->on('medic');
+            $table->foreign('medic_id')->references('id')->on('medic')->onDelete('cascade');
             $table->timestamps();
         });
     }

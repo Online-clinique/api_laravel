@@ -24,7 +24,7 @@ class CreateMedicsTable extends Migration
             $table->string('request_hash')->nullable();
 
             $table->uuid('added_by');
-            $table->foreign('added_by')->references('id')->on('admins');
+            $table->foreign('added_by')->references('id')->on('admins')->onDelete('cascade');
             
 
 
