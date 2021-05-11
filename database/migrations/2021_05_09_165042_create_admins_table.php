@@ -17,6 +17,7 @@ class CreateAdminsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('username')->unique();
             $table->string('full_name');
+            $table->string('photo_de_profile')->nullable();
             $table->boolean('admin');
             $table->string('password');
             $table->timestamps();

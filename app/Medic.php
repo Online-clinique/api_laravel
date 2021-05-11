@@ -12,7 +12,7 @@ class Medic extends Model
     use \App\Http\Traits\UsesUuid;
 
     protected $fillable = [
-        'name', 'email', 'password', 'added_by', 'request_hash'
+        'name', 'email', 'password', 'added_by', 'request_hash', 'account_status'
     ];
 
     /**

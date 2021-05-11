@@ -14,7 +14,7 @@ class CreateHorairesTable extends Migration
     public function up()
     {
         Schema::create('horaires', function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
+            $table->uuid('id')->primary();
             $table->string('slug');
             $table->string('value');
             

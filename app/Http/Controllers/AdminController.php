@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Admin;
+use App\Medic;
 use \Firebase\JWT\JWT;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -128,5 +129,16 @@ class AdminController extends Controller
                 "message" => "Are you trying to hack me"
             ],  401);
         }
+    }
+
+    public function docs(Request $request)
+    {
+        $docs = Admin::find($request['currentuser']->id)->docs;
+
+        return response()->json(
+            [
+                'doctors' => $docs
+            ]
+        );
     }
 }

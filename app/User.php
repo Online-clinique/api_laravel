@@ -3,13 +3,14 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Model
 {
     use Notifiable;
+    use \App\Http\Traits\UsesUuid;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +18,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'cne'
     ];
 
     /**
@@ -42,18 +43,11 @@ class User extends Authenticatable implements JWTSubject
      * @return mixed
      */
 
-    public function getJWTIdentifier() {
-        return $this->getKey();
-    }
+    protected $hidden = array('password');
 
-    /**
-     * @return array
-     */
-    public function  getJWTCustomClaims() {
-        return [];
+    public function setPasswordAttribute($raw) {
+        $this->attributes['password'] = Hash::make($raw);
     }
+    
 
-    public function getAuthPassword() {
-        return "yes please";
-    }
 }

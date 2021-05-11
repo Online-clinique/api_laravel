@@ -24,4 +24,8 @@ class Admin extends Model
     public function setPasswordAttribute($raw) {
         $this->attributes['password'] = Hash::make($raw);
     }
+
+    public function docs() {
+        return $this->hasMany(Medic::class, 'added_by');
+    }
 }

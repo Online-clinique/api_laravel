@@ -22,14 +22,15 @@ use App\Http\Middleware\EnsureAuthenticated;
 
 // Private  Routes
 Route::middleware('checkauth')->group(function () {
-
+    
     // Admin CR
-    Route::get('/admin', 'AdminController@index');
     Route::post('/admin', 'AdminController@store');
+    Route::get('/admin', 'AdminController@index');
 
     
     // Get admin user
-    Route::get('/admin/self', 'AdminController@self');
+    Route::get('/admin/me', 'AdminController@self');
+    Route::get('/admin/mydocs', 'AdminController@docs');
 
     // GET ONE ADMIN
     Route::get('/admin/{id}', 'AdminController@show');
