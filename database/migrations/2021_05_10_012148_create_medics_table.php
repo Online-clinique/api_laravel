@@ -24,6 +24,7 @@ class CreateMedicsTable extends Migration
             $table->string('request_hash')->nullable();
             $table->string('account_status');
             $table->string('speciality');
+            $table->string('region_ville');
             $table->string('photo_de_profile')->nullable();
 
             $table->uuid('added_by');
