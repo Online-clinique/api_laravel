@@ -23,6 +23,8 @@ class CreateMedicsTable extends Migration
             $table->string('mean_of_payement')->nullable();
             $table->string('request_hash')->nullable();
             $table->string('account_status');
+            $table->string('speciality');
+            $table->string('photo_de_profile')->nullable();
 
             $table->uuid('added_by');
             $table->foreign('added_by')->references('id')->on('admins')->onDelete('cascade');
@@ -35,7 +37,6 @@ class CreateMedicsTable extends Migration
             // $table->string('contacts');
             // $table->string('horaire');
             // $table->string('language_parle');
-            $table->string('photo_de_profile')->nullable();
             $table->timestamps();
             // $table->foreignUuid('added_by')->constrained('admins');
         });

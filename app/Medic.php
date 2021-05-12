@@ -3,6 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Tarif;
+use App\Experience;
+use App\Expertise;
+use App\Formation;
+use App\Horaire;
+use App\Admin;
 
 class Medic extends Model
 {
@@ -35,8 +41,26 @@ class Medic extends Model
         'email_verified_at' => 'datetime',
     ];
 
-    public function getJWTIdentifier() {
-        return $this->getKey();
+    public function tarifs() 
+    {
+        return $this->hasMany(Tarif::class, 'medic_id');
+    }
+    public function experiences() 
+    {
+        return $this->hasMany(Experience::class, 'medic_id');
+    }
+    public function expertise() 
+    {
+        return $this->hasMany(Expertise::class, 'medic_id');
+    }
+
+    public function formations() 
+    {
+        return $this->hasMany(Formation::class, 'medic_id');
+    }
+    public function horaire() 
+    {
+        return $this->hasMany(Horaire::class, 'medic_id');
     }
 
 
