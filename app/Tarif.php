@@ -12,6 +12,7 @@ class Tarif extends Model
     protected $fillable = [
         "medic_id",
         "price",
-        "slug"
+        "slug",
+        "description"
     ];
 }

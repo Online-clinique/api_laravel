@@ -18,7 +18,8 @@ class CreateExperiencesTable extends Migration
 
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->string('title');
+            $table->string('slug');
+            $table->string('description');
 
             $table->uuid("medic_id");
             $table->foreign('medic_id')->references('id')->on('medic')->onDelete('cascade');

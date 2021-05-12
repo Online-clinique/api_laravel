@@ -10,6 +10,7 @@ class Expertise extends Model
     use \App\Http\Traits\UsesUuid;
 
     protected $fillable = [
-        "medic_id"
+        "medic_id",
+        "slug"
     ];
 }

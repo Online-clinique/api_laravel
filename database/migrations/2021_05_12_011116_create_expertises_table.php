@@ -15,6 +15,7 @@ class CreateExpertisesTable extends Migration
     {
         Schema::create('expertises', function (Blueprint $table) {
             $table->uuid("id");
+            $table->date('slug')
             $table->uuid("medic_id");
             $table->foreign('medic_id')->references('id')->on('medic')->onDelete('cascade');
             $table->timestamps();
