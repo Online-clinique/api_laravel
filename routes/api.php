@@ -20,21 +20,21 @@ use App\Http\Middleware\EnsureAuthenticated;
 // });
 
 
+Route::post('/admin', 'AdminController@store');
 // Private  Routes
 Route::middleware('checkauth')->group(function () {
-    
+
     // Admin CR
-    Route::post('/admin', 'AdminController@store');
     Route::get('/admin', 'AdminController@index');
 
-    
+
     // Get admin user
     Route::get('/admin/me', 'AdminController@self');
     Route::get('/admin/mydocs', 'AdminController@docs');
 
     // GET ONE ADMIN
     Route::get('/admin/{id}', 'AdminController@show');
-    
+
 
     // Submit new Doctor
     Route::post('/medic/doc', 'MedicController@requestNewMedic');

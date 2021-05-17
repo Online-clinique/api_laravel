@@ -75,59 +75,70 @@ class AdminController extends Controller
         //
     }
 
-    public function self(Request $request) 
+    public function self(Request $request)
     {
         return response()->json($request['currentuser']);
     }
 
     public function SignAdmin(Request $request)
     {
-        $data = $request->only('username', 'password');
-
-
-        $request->validate([
-            'username' => 'required|email',
-            "password" => 'required'
-        ]);
-
-        if (!Admin::where('username', $data['username'])->exists()) {
-            # code...
-            return response()->json([
-                "status" => 401,
-                "message" => "Bad credentials"
+        try {
+            $data = $request->only('username', 'password');
+            $request->validate([
+                'username' => 'required|email',
+                "password" => 'required'
             ]);
-        }
 
-        $target_password = $data['password'];
-        $resource_admin = Admin::where('username', $data['username'])->get()->first();
+            if (!Admin::where('username', $data['username'])->exists()) {
+                # code...
+                return response()->json([
+                    "status" => 401,
+                    "message" => "Bad credentials"
+                ], 401);
+            }
 
-        $same = Hash::check($target_password, $resource_admin['password']);
+            $target_password = $data['password'];
+            $resource_admin = Admin::where('username', $data['username'])->get()->first();
+
+            $same = Hash::check($target_password, $resource_admin['password']);
 
 
-        // $same_password = Hash::check($data['password'], );
+            // $same_password = Hash::check($data['password'], );
 
-        // echo gettype($resource_admin);
-        // return;
-        
-        
-        if (boolval($same) === TRUE) {
-            $now_seconds = time();
-            $exp_seconds = $now_seconds + (60 * 60);
-            $resource_admin->iat = $now_seconds;
-            $resource_admin->exp = $exp_seconds;
+            // echo gettype($resource_admin);
+            // return;
+
+
+            if (boolval($same) === TRUE) {
+                $now_seconds = time();
+                $exp_seconds = $now_seconds + (60 * 60);
+                $resource_admin->iat = $now_seconds;
+                $resource_admin->exp = $exp_seconds;
+                return response()->json([
+                    'status' => 200,
+                    "message" => "you are now signed in"
+                ])->cookie(
+                    "auth:token",
+                    base64_encode(json_encode([
+                        'jwt' => JWT::encode($resource_admin, env('JWT_SECRET'))
+                    ])),
+                    NULL,
+                    "/",
+                    null,
+                    false,
+                    true
+                );
+            } else {
+                return response()->json([
+                    'status' => 401,
+                    "message" => "Are you trying to hack me"
+                ],  401);
+            }
+        } catch (\Throwable $th) {
             return response()->json([
-                'status' => 200,
-                "message" => "you are now signed in"
-            ])->cookie(
-                "auth:token", base64_encode(json_encode([
-                    'jwt' => JWT::encode($resource_admin, env('JWT_SECRET'))
-                ]))
-            );
-        } else {
-            return response()->json([
-                'status' => 401,
-                "message" => "Are you trying to hack me"
-            ],  401);
+                'status' => 500,
+                "message" => "Something happened"
+            ],  500);
         }
     }
 

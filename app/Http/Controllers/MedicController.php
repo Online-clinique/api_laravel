@@ -32,7 +32,7 @@ class MedicController extends Controller
     public function store(Request $request)
     {
         //
-        
+
 
 
     }
@@ -84,7 +84,7 @@ class MedicController extends Controller
                 'message' => 'Docteur exist Déja'
             ], 400);
         }
-        
+
         $request_hash = Str::uuid();
 
         $hash_tobe_sent = base64_encode(JWT::encode(json_encode([
@@ -95,11 +95,12 @@ class MedicController extends Controller
         DB::beginTransaction();
 
         DB::insert(
-        "insert into medic (id, added_by, request_hash, username, account_status) 
-        values (?, ?, ?, ?, ?)", 
-        [
-            Str::uuid(), $request["currentuser"]->id, $request_hash, $data, "pending_metadata"
-        ]);
+            "insert into medic (id, added_by, request_hash, username, account_status) 
+        values (?, ?, ?, ?, ?)",
+            [
+                Str::uuid(), $request["currentuser"]->id, $request_hash, $data, "pending_metadata"
+            ]
+        );
 
         if (mail($data, 'Email to de verification', "http://localhost:8000/api/medic/verify/$hash_tobe_sent")) {
             DB::commit();
@@ -109,7 +110,6 @@ class MedicController extends Controller
         } else {
             DB::rollBack();
         }
-
     }
 
     public function validateRequestEmail($base)
@@ -123,23 +123,30 @@ class MedicController extends Controller
         //         ]);
         //     }
         // }
-        $jwt = base64_decode($base);
-        $uuid = JWT::decode($jwt, env('JWT_SECRET'), array('HS256'));
-        $doc = Medic::where('request_hash', json_decode($uuid)->hash);
+        try {
+            $jwt = base64_decode($base);
+            $uuid = JWT::decode($jwt, env('JWT_SECRET'), array('HS256'));
+            $doc = Medic::where('request_hash', json_decode($uuid)->hash);
 
 
-        $hash = JWT::decode($jwt, env('JWT_SECRET'), array('HS256'));
+            $hash = JWT::decode($jwt, env('JWT_SECRET'), array('HS256'));
 
-        if (!$doc->exists()) {
+            if (!$doc->exists()) {
+                return response()->json([
+                    'status' => 422,
+                    'message' => 'Invalid link'
+                ], 422);
+            }
+
             return response()->json([
-                'status' => 422,
-                'message' => 'Invalid link'
-            ], 422);
+                "status" => 200,
+                "message" => $doc->get()->first()
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => 422,
+                "message" => $th->getMessage()
+            ]);
         }
-
-        return response()->json([
-            "status" => 200,
-            "message" => $doc->get()->first()
-        ]);
     }
 }

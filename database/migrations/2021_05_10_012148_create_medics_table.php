@@ -23,13 +23,13 @@ class CreateMedicsTable extends Migration
             $table->string('mean_of_payement')->nullable();
             $table->string('request_hash')->nullable();
             $table->string('account_status');
-            $table->string('speciality');
-            $table->string('region_ville');
+            $table->string('speciality')->nullable();
+            $table->string('region_ville')->nullable();
             $table->string('photo_de_profile')->nullable();
 
             $table->uuid('added_by');
             $table->foreign('added_by')->references('id')->on('admins')->onDelete('cascade');
-            
+
 
 
             // $table->uuid('added_by')->nullable(false);
