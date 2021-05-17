@@ -28,16 +28,20 @@ Route::middleware('checkauth')->group(function () {
     Route::get('/admin', 'AdminController@index');
 
 
-    // Get admin user
-    Route::get('/admin/me', 'AdminController@self');
-    Route::get('/admin/mydocs', 'AdminController@docs');
+    Route::middleware(['ensureadmin'])->group(function () {
+        // Get admin user
+        Route::get('/admin/me', 'AdminController@self');
+        Route::get('/admin/mydocs', 'AdminController@docs');
 
-    // GET ONE ADMIN
-    Route::get('/admin/{id}', 'AdminController@show');
+        Route::get('/admin/signout', 'AdminController@signout');
+
+        // GET ONE ADMIN
+        Route::get('/admin/{id}', 'AdminController@show');
 
 
-    // Submit new Doctor
-    Route::post('/medic/doc', 'MedicController@requestNewMedic');
+        // Submit new Doctor
+        Route::post('/medic/doc', 'MedicController@requestNewMedic');
+    });
 });
 
 // Public Routes

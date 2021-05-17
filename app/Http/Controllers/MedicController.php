@@ -96,13 +96,13 @@ class MedicController extends Controller
 
         DB::insert(
             "insert into medic (id, added_by, request_hash, username, account_status) 
-        values (?, ?, ?, ?, ?)",
+            values (?, ?, ?, ?, ?)",
             [
                 Str::uuid(), $request["currentuser"]->id, $request_hash, $data, "pending_metadata"
             ]
         );
 
-        if (mail($data, 'Email to de verification', "http://localhost:8000/api/medic/verify/$hash_tobe_sent")) {
+        if (mail($data, 'Email to de verification', "http://localhost:5500/dash/medic/$hash_tobe_sent")) {
             DB::commit();
             return response()->json([
                 'status' => 200

@@ -8,6 +8,7 @@ use App\Medic;
 use \Firebase\JWT\JWT;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 
 class AdminController extends Controller
 {
@@ -151,5 +152,11 @@ class AdminController extends Controller
                 'doctors' => $docs
             ]
         );
+    }
+
+    public function signout()
+    {
+        $cookie = Cookie::forget('auth:token');
+        return redirect("http://localhost:5500/dash/admin")->withCookie($cookie);
     }
 }
