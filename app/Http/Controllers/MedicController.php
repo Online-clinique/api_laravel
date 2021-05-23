@@ -11,6 +11,8 @@ use \Firebase\JWT\JWT;
 
 use Illuminate\Support\Facades\DB;
 
+use App\Expertise;
+
 class MedicController extends Controller
 {
     /**
@@ -46,6 +48,10 @@ class MedicController extends Controller
     public function show($id)
     {
         //
+        return response()->json([
+            "status" => 200,
+            "data" => Medic::where('id', $id)->with('expertise')->first()
+        ]);
     }
 
     /**
@@ -112,6 +118,107 @@ class MedicController extends Controller
         }
     }
 
+    public function GenJWTBase64($payload)
+    {
+        return base64_encode(json_encode([
+            'jwt' => JWT::encode($payload, env('JWT_SECRET'))
+        ]));
+    }
+
+
+    public function continueSignUp(Request $request)
+    {
+
+        // id_admin,
+        // 	id_medic,
+        // 	email,
+        // 	password,
+        // 	password_confirm,
+        // 	first_name,
+        // 	last_name,
+        // 	addresse_cabinet,
+        // 	tel_pers,
+        // 	tel_fixe,
+        // 	tarifs,
+        // 	cni,
+
+
+        $request->validate([
+            'id_admin' => 'required|uuid',
+            'id_medic' => 'required|uuid',
+            'email' => 'email|required',
+            'password' => 'required',
+            'password_confirm' => 'string|required',
+            'first_name' => 'string|required',
+            'last_name' => 'string|required',
+            'addresse_cabinet' => 'string|required',
+            'tel_pers' => 'string|required|numeric',
+            'tel_fixe' => 'string|required|numeric',
+            'tarifs' => 'string|required',
+            'cni' => 'string|required',
+            'specialite' => 'required'
+        ]);
+
+        $data = $request->only(
+            'id_admin',
+            'id_medic',
+            'email',
+            'password',
+            'password_confirm',
+            'first_name',
+            'last_name',
+            'addresse_cabinet',
+            'tel_pers',
+            'tel_fixe',
+            'tarifs',
+            'cni',
+            'specialite'
+        );
+
+        if ($data['password'] !== $data['password_confirm']) {
+            return response()->json([
+                "status" => 400,
+                "message" => "Passwords do not match"
+            ]);
+        }
+        DB::beginTransaction();
+
+        try {
+            $users = DB::table('medic')
+                ->where('id', [$data['id_medic']])
+                ->update([
+                    'full_name' => ucfirst($data['first_name']) . " " . ucfirst($data['last_name']),
+                    'password' => bcrypt($data['password']),
+                    'adresse_cabinet' => $data['addresse_cabinet'],
+                    'phone_portable' => $data['tel_pers'],
+                    'phone_cabinet' => $data['tel_fixe'],
+                    'cni' => $data['cni'],
+                    'account_status' => 'active',
+                    'request_hash' => null
+                ]);
+
+            foreach ($data['specialite'] as $value) {
+                DB::table('expertises')->insert([
+                    'slug' => Str::slug($value['value'], "-"),
+                    'medic_id' => $data['id_medic'],
+                    'id' => Str::uuid()
+                ]);
+            }
+            DB::commit();
+            return response()->json([
+                "status" => 200,
+                "payload " => Medic::find($data['id_medic'])
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json([
+                "status" => 500,
+                "message " => $th->getMessage()
+            ], 500);
+        }
+    }
+
     public function validateRequestEmail($base)
     {
         // try {
@@ -129,8 +236,6 @@ class MedicController extends Controller
             $doc = Medic::where('request_hash', json_decode($uuid)->hash);
 
 
-            $hash = JWT::decode($jwt, env('JWT_SECRET'), array('HS256'));
-
             if (!$doc->exists()) {
                 return response()->json([
                     'status' => 422,
@@ -138,15 +243,25 @@ class MedicController extends Controller
                 ], 422);
             }
 
+            $doc_object = $doc->get()->first();
+
             return response()->json([
                 "status" => 200,
-                "message" => $doc->get()->first()
-            ]);
+                "message" => $doc_object
+            ])->cookie(
+                "validate",
+                $this->GenJWTBase64(
+                    [
+                        'id_admin' => $doc_object['added_by'],
+                        'id_medic' => $doc_object['id']
+                    ]
+                )
+            );
         } catch (\Throwable $th) {
             return response()->json([
                 "status" => 422,
                 "message" => $th->getMessage()
-            ]);
+            ], 422);
         }
     }
 }

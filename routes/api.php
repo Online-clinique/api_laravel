@@ -44,7 +44,11 @@ Route::middleware('checkauth')->group(function () {
     });
 });
 
+Route::middleware(['ensurevalide'])->group(function () {
+    Route::post('/medic/continue', 'MedicController@continueSignUp');
+});
 // Public Routes
 
 Route::post('/admin/login', 'AdminController@SignAdmin');
 Route::get('/medic/verify/{id}', 'MedicController@validateRequestEmail');
+Route::get('/doctor/{id}', 'MedicController@show');
