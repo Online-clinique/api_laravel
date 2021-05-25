@@ -14,11 +14,11 @@ class MedicUpdate extends Migration
     public function up()
     {
         //
-        Schema::table('medic', function (Blueprint $table) {
-            $table->string('phone_portable')->nullable();
-            $table->string('phone_cabinet')->nullable();
-            $table->string('cni')->nullable();
-        });
+        // Schema::table('medic', function (Blueprint $table) {
+        //     $table->string('phone_portable')->nullable();
+        //     $table->string('phone_cabinet')->nullable();
+        //     $table->string('cni')->nullable();
+        // });
     }
 
     /**

@@ -17,9 +17,6 @@ class Medic extends Model
 
     use \App\Http\Traits\UsesUuid;
 
-    protected $fillable = [
-        'name', 'email', 'password', 'added_by', 'request_hash', 'account_status'
-    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -32,6 +29,11 @@ class Medic extends Model
 
     protected $table = 'medic';
 
+
+    protected $guarded = [
+        'id'
+    ];
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -41,24 +43,24 @@ class Medic extends Model
         'email_verified_at' => 'datetime',
     ];
 
-    public function tarifs() 
+    public function tarifs()
     {
         return $this->hasMany(Tarif::class, 'medic_id');
     }
-    public function experiences() 
+    public function experiences()
     {
         return $this->hasMany(Experience::class, 'medic_id');
     }
-    public function expertise() 
+    public function expertise()
     {
         return $this->hasMany(Expertise::class, 'medic_id');
     }
 
-    public function formations() 
+    public function formations()
     {
         return $this->hasMany(Formation::class, 'medic_id');
     }
-    public function horaire() 
+    public function horaire()
     {
         return $this->hasMany(Horaire::class, 'medic_id');
     }

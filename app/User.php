@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model
@@ -26,9 +27,6 @@ class User extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -45,9 +43,8 @@ class User extends Model
 
     protected $hidden = array('password');
 
-    public function setPasswordAttribute($raw) {
+    public function setPasswordAttribute($raw)
+    {
         $this->attributes['password'] = Hash::make($raw);
     }
-    
-
 }

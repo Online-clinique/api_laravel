@@ -28,6 +28,7 @@ class CreateMedicsTable extends Migration
             $table->string('account_status');
             $table->string('region_ville')->nullable();
             $table->string('photo_de_profile')->nullable();
+            $table->string('days_off')->nullable();
 
             $table->uuid('added_by');
             $table->foreign('added_by')->references('id')->on('admins')->onDelete('cascade');

@@ -14,11 +14,11 @@ class Medic extends Migration
     public function up()
     {
         //
-        Schema::table('medic', function (Blueprint $table) {
-            $table->string('phone_portable');
-            $table->string('phone_cabinet');
-            $table->string('cni');
-        });
+        // Schema::table('medic', function (Blueprint $table) {
+        //     $table->string('phone_portable');
+        //     $table->string('phone_cabinet');
+        //     $table->string('cni');
+        // });
     }
 
     /**

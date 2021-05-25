@@ -10,10 +10,7 @@ class Horaire extends Model
     use \App\Http\Traits\UsesUuid;
 
 
-    protected $fillable = [
-        "slug",
-        "value",
-        "medic_id"
+    protected $guarded = [
+        "id"
     ];
-    
 }

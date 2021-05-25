@@ -9,7 +9,7 @@ class Tarif extends Model
     //
     use \App\Http\Traits\UsesUuid;
 
-    protected $fillable = [
+    protected $guarded = [
         "medic_id",
         "price",
         "slug",
