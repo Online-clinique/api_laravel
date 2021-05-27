@@ -247,7 +247,7 @@ class MedicController extends Controller
             return response()->json([
                 "status" => 400,
                 "message" => "Passwords do not match"
-            ]);
+            ], 400);
         }
         DB::beginTransaction();
 
