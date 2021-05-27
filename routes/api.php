@@ -40,15 +40,36 @@ Route::middleware('checkauth')->group(function () {
 
 
         // Submit new Doctor
+
         Route::post('/medic/doc', 'MedicController@requestNewMedic');
+
+        // Get current doctor
+    });
+
+    Route::middleware(['ensuredoctor'])->group(function () {
+        Route::get('/doctor/me', 'MedicController@self');
+        Route::post('/doctor/off', 'MedicController@days_off');
+        Route::post('/doctor/fix_time', 'MedicController@fix_time');
+        Route::post('/doctor/about', 'MedicController@about');
     });
 });
 
 Route::middleware(['ensurevalide'])->group(function () {
     Route::post('/medic/continue', 'MedicController@continueSignUp');
 });
-// Public Routes
 
+
+/**
+ * PUBLIC ROUTES
+ */
+
+// login routes
 Route::post('/admin/login', 'AdminController@SignAdmin');
+Route::post('/medic/login', 'MedicController@SignMedic');
+
 Route::get('/medic/verify/{id}', 'MedicController@validateRequestEmail');
 Route::get('/doctor/{id}', 'MedicController@show');
+
+// Search
+
+Route::get('/search/{spec}/{cat}/{name}', 'CommitSearch@index');

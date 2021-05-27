@@ -33,6 +33,13 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'username' => 'email|required',
+            'password' => 'string|required',
+            'full_name' => 'string|required',
+            'admin' => 'required'
+        ]);
+
         if (Admin::where('username', $request->all()['username'])->exists()) {
             return response()->json([
                 'status' => 401,

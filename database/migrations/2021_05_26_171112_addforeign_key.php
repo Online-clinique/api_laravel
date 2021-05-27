@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateExpertisesTable extends Migration
+class AddforeignKey extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateExpertisesTable extends Migration
      */
     public function up()
     {
-        Schema::create('expertises', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->string('slug');
-            $table->uuid("medic_id");
+        //
+        Schema::table('calendars', function (Blueprint $table) {
+            $table->uuid('medic_id');
             $table->foreign('medic_id')->references('id')->on('medic')->onDelete('cascade');
-            $table->timestamps();
         });
+        // });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -29,6 +27,6 @@ class CreateExpertisesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('expertises');
+        //
     }
 }

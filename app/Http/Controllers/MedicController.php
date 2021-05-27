@@ -8,10 +8,10 @@ use App\Medic;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 use \Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\DB;
 
-use App\Expertise;
 
 class MedicController extends Controller
 {
@@ -125,6 +125,72 @@ class MedicController extends Controller
         ]));
     }
 
+    public function self(Request $request)
+    {
+        if (!$request['currentuser']) {
+            return response()->json([
+                'status' => 401
+            ], 401);
+        }
+        return response()->json(Medic::where('id', $request['currentuser']->id)->with('expertise', 'appoint', 'calendar')->first());
+    }
+
+    public function days_off(Request $request)
+    {
+        $request->validate([
+            'arr_off' => 'required'
+        ]);
+
+        $dys_to_saved = $request->only('arr_off')['arr_off'];
+        Medic::where('id', $request['currentuser']->id)->update([
+            'days_off' => $dys_to_saved
+        ]);
+        return response()->json([
+            'status' => 201,
+            'message' => $request->only('arr_off')['arr_off']
+        ]);
+    }
+
+    public function fix_time(Request $request)
+    {
+        $request->validate([
+            'd' => 'required|string',
+            'f' => 'required|string'
+        ]);
+
+        Medic::where('id', $request['currentuser']->id)->update([
+            'debut_jour' => $request->only('d', 'f')['d'],
+            'fin_jour' => $request->only('d', 'f')['f'],
+        ]);
+
+        return response()->json(
+            [
+                'status' => 200,
+            ]
+        );
+    }
+
+
+    public function about(Request $request)
+    {
+        $request->validate([
+            'about' => 'required|string',
+            'profile_image' => 'url|nullable',
+            'cover_image' => 'url|nullable'
+        ]);
+
+        Medic::where('id', $request['currentuser']->id)->update(
+            [
+                'about' => $request->only('about')['about'],
+                'photo_de_profile' => $request->only('profile_image')['profile_image'],
+                'cover_image' => $request->only('cover_image')['cover_image'],
+            ]
+        );
+
+        return response()->json(
+            ['status' => 200]
+        );
+    }
 
     public function continueSignUp(Request $request)
     {
@@ -156,7 +222,8 @@ class MedicController extends Controller
             'tel_fixe' => 'string|required|numeric',
             'tarifs' => 'string|required',
             'cni' => 'string|required',
-            'specialite' => 'required'
+            'specialite' => 'required',
+            'ville' => 'required'
         ]);
 
         $data = $request->only(
@@ -172,7 +239,8 @@ class MedicController extends Controller
             'tel_fixe',
             'tarifs',
             'cni',
-            'specialite'
+            'specialite',
+            'ville'
         );
 
         if ($data['password'] !== $data['password_confirm']) {
@@ -194,7 +262,8 @@ class MedicController extends Controller
                     'phone_cabinet' => $data['tel_fixe'],
                     'cni' => $data['cni'],
                     'account_status' => 'active',
-                    'request_hash' => null
+                    'request_hash' => null,
+                    'ville' => $data['ville']['value']
                 ]);
 
             foreach ($data['specialite'] as $value) {
@@ -262,6 +331,61 @@ class MedicController extends Controller
                 "status" => 422,
                 "message" => $th->getMessage()
             ], 422);
+        }
+    }
+
+    public function SignMedic(Request $request)
+    {
+        $request->validate([
+            'username' => 'required|email',
+            "password" => 'required'
+        ]);
+        try {
+            $data = $request->only('username', 'password');
+
+            if (!Medic::where('username', $data['username'])->exists()) {
+                return response()->json([
+                    "status" => 401,
+                    "message" => "Wrong password / email"
+                ], 401);
+            }
+
+            $subject_password = $data['password'];
+            $resource_medic = Medic::where('username', $data['username'])->get()->first();
+
+            $same = Hash::check($subject_password, $resource_medic['password']);
+
+            if (boolval($same)  === TRUE) {
+                $now_seconds = time();
+                $exp_seconds = $now_seconds + (60 * 60);
+                $resource_medic->iat = $now_seconds;
+                $resource_medic->exp = $exp_seconds;
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Welcome back'
+                ])->cookie(
+                    'auth:token',
+                    $this->GenJWTBase64(
+                        $resource_medic
+                    ),
+                    null,
+                    '/',
+                    null,
+                    false,
+                    true
+                );
+            } else {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Wrong password / email'
+                ]);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

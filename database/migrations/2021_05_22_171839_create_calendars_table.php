@@ -14,7 +14,13 @@ class CreateCalendarsTable extends Migration
     public function up()
     {
         Schema::create('calendars', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
+            // $table->string('days_off');
+
+            $table->string('day');
+            $table->string('start_time');
+            $table->string('end_time');
+
             $table->timestamps();
         });
     }

@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Medic;
+
 class Expertise extends Model
 {
     //
@@ -12,4 +14,9 @@ class Expertise extends Model
     protected $guarded = [
         "id"
     ];
+
+    public function medic()
+    {
+        $this->belongsTo(Medic::class, 'medic_id');
+    }
 }

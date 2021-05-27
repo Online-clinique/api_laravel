@@ -22,8 +22,9 @@ class CreateAppointementsTable extends Migration
             $table->uuid('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->string('date');
-            $table->string('time');
+            $table->string('title');
+            $table->string('start');
+            $table->string('end');
 
             $table->string('status');
 

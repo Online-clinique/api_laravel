@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use App\Appointement;
+
 class User extends Model
 {
     use Notifiable;
@@ -18,8 +20,8 @@ class User extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'cne'
+    protected $guarded = [
+        'id'
     ];
 
     /**
@@ -36,6 +38,11 @@ class User extends Model
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function appointement()
+    {
+        return $this->hasMany(Appointement::class, 'user_id');
+    }
 
     /**
      * @return mixed

@@ -8,6 +8,8 @@ use App\Experience;
 use App\Expertise;
 use App\Formation;
 use App\Horaire;
+use App\Appointement;
+use App\Calendar;
 use App\Admin;
 
 class Medic extends Model
@@ -63,6 +65,16 @@ class Medic extends Model
     public function horaire()
     {
         return $this->hasMany(Horaire::class, 'medic_id');
+    }
+
+    public function appoint()
+    {
+        return $this->hasMany(Appointement::class, 'medic_id');
+    }
+
+    public function calendar()
+    {
+        return $this->hasMany(Calendar::class, 'medic_id');
     }
 
 
