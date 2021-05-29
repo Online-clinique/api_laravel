@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: 'e8b2a6c5-86d5-4119-80c2-e5e47984a65d'
   imageRepository: 'onlinecliniqueimage'
   containerRegistry: 'onlineclinique.azurecr.io'
-  dockerfilePath: '**/container/Dockerfile'
+  dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
