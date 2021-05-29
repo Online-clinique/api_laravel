@@ -60,6 +60,16 @@ Route::middleware(['ensurevalide'])->group(function () {
 });
 
 
+// Patient Routes
+
+Route::middleware(['currentuser'])->group(function () {
+    Route::get('/user/me', 'UserController@me');
+    Route::post('/user/login', 'UserController@Login');
+    Route::post('/user/create', 'UserController@store');
+    Route::post('/appointement/take', 'UserController@appointement');
+});
+
+
 /**
  * PUBLIC ROUTES
  */
@@ -74,12 +84,4 @@ Route::get('/doctor/{id}', 'MedicController@show');
 // Search
 
 Route::get('/search/{spec}/{cat}/{name}', 'CommitSearch@index');
-
-// Patient Routes
-
-Route::middleware(['currentuser'])->group(function () {
-    Route::get('/user/me', 'UserController@me');
-    Route::post('/user/login', 'UserController@Login');
-    Route::post('/user/create', 'UserController@store');
-    Route::post('/appointement/take', 'UserController@appointement');
-});
+Route::get('/my-appointements/{id}', 'MedicController@this_doc_appointement');

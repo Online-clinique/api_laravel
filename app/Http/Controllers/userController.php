@@ -207,7 +207,7 @@ class UserController extends Controller
         return response()->json(
             [
                 'status' => 200,
-                'payload' => $request['currentuser']
+                'payload' => User::where('id', $request['currentuser']->id)->with('appointement')->first()
             ]
         );
     }

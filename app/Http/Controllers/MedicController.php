@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Medic;
+use App\Appointement;
 use Illuminate\Support\Str;
 use \Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Hash;
@@ -43,6 +44,14 @@ class MedicController extends Controller
 
 
 
+    }
+
+    public function this_doc_appointement(Request $request, $id)
+    {
+        return response()->json([
+            'status' => 200,
+            'payload' => Appointement::where('medic_id', $id)->get('start', 'end')
+        ]);
     }
 
     /**
