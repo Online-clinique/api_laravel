@@ -1,28 +1,32 @@
-version: "2"
+version: "3"
 services:
+  #PHP Service
   app:
     image: onlineclinique.azurecr.io/onlinecliniqueimage:latest
-    ports:
-      - "8009:8000"
-    volumes:
-      - .:/app
+    container_name: laravel_api
+    restart: unless-stopped
+    tty: true
     env_file: .env
-    working_dir: /app
-    command: bash -c 'php artisan migrate && php artisan serve --host 127.0.0.1'
-    depends_on:
-      - db
-    links:
-      - db
+    working_dir: /var/www
+    networks:
+      - app-network
+
+  #MySQL Service
   db:
-    image: "mysql:5.7"
-    environment:
-      - MYSQL_ROOT_PASSWORD=2468147aZ!!
-      - MYSQL_DATABASE=testdb
-      - MYSQL_PASSWORD=2468147aZ!!
-    volumes:
-      - ./data/:/var/lib/mysql
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: 2468147aZ!!
+      MYSQL_PASSWORD: 2468147aZ!!
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
   phpmyadmin:
     depends_on:
       - db
@@ -33,3 +37,13 @@ services:
     environment:
       PMA_HOST: root
       MYSQL_ROOT_PASSWORD: 2468147aZ!!
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+# Docker volumes
+
+volumes:
+  dbdata:
+    driver: local
