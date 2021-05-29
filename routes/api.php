@@ -48,6 +48,7 @@ Route::middleware('checkauth')->group(function () {
 
     Route::middleware(['ensuredoctor'])->group(function () {
         Route::get('/doctor/me', 'MedicController@self');
+        Route::get('/my-appointements', 'MedicController@appoint');
         Route::post('/doctor/off', 'MedicController@days_off');
         Route::post('/doctor/fix_time', 'MedicController@fix_time');
         Route::post('/doctor/about', 'MedicController@about');
@@ -73,3 +74,12 @@ Route::get('/doctor/{id}', 'MedicController@show');
 // Search
 
 Route::get('/search/{spec}/{cat}/{name}', 'CommitSearch@index');
+
+// Patient Routes
+
+Route::middleware(['currentuser'])->group(function () {
+    Route::get('/user/me', 'UserController@me');
+    Route::post('/user/login', 'UserController@Login');
+    Route::post('/user/create', 'UserController@store');
+    Route::post('/appointement/take', 'UserController@appointement');
+});

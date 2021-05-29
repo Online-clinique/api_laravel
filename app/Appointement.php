@@ -8,4 +8,8 @@ class Appointement extends Model
 {
     //
     use \App\Http\Traits\UsesUuid;
+
+    protected $guarded = [
+        "id"
+    ];
 }

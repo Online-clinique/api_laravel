@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Medic;
-
-use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 use \Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +21,14 @@ class MedicController extends Controller
     public function index()
     {
         //
+    }
+
+    public function appoint(Request $request)
+    {
+        return response()->json([
+            "status" => 200,
+            "payload" => Medic::where('id', $request['currentuser']->id)->with('appoint')->first()
+        ]);
     }
 
     /**

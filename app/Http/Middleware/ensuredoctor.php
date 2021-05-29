@@ -24,6 +24,6 @@ class ensuredoctor
         return response()->json([
             'status' => 401,
             'message' => 'not authorized'
-        ]);
+        ], 401);
     }
 }

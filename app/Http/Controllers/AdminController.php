@@ -91,12 +91,12 @@ class AdminController extends Controller
     public function SignAdmin(Request $request)
     {
         try {
-            $data = $request->only('username', 'password');
             $request->validate([
                 'username' => 'required|email',
                 "password" => 'required'
             ]);
 
+            $data = $request->only('username', 'password');
             if (!Admin::where('username', $data['username'])->exists()) {
                 # code...
                 return response()->json([

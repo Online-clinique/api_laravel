@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'checkauth' => \App\Http\Middleware\EnsureAuthenticated::class,
         'ensureadmin' => \App\Http\Middleware\EnsureAdmin::class,
         'ensurevalide' => \App\Http\Middleware\EnsureValide::class,
-        'ensuredoctor' => \App\Http\Middleware\ensuredoctor::class
+        'ensuredoctor' => \App\Http\Middleware\ensuredoctor::class,
+        'currentuser' => \App\Http\Middleware\CurrentUser::class
     ];
 }
