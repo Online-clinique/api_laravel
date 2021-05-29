@@ -21,7 +21,7 @@ return [
 
     'allowed_origins' => ['*'],
 
-    'allowed_origins_patterns' => ["http://localhost:5500"],
+    'allowed_origins_patterns' => ["http://localhost:5500", "https://online-clinique.game-linter.com"],
 
     'allowed_headers' => ['*'],
 

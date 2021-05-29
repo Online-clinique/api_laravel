@@ -1,7 +1,7 @@
 version: "2"
 services:
   app:
-    build: .
+    image: onlineclinique.azurecr.io/onlinecliniqueimage:latest
     ports:
       - "8009:8000"
     volumes:
