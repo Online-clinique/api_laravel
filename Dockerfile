@@ -5,5 +5,6 @@ RUN docker-php-ext-install pdo pdo_mysql
 WORKDIR /app
 COPY . /app
 RUN composer install
-CMD php artisan serve --host=127.0.0.1 --port=8181
+RUN php artisan migrate
+RUN php artisan serve --host=127.0.0.1 --port=8181
 EXPOSE 8181

@@ -8,7 +8,6 @@ services:
       - .:/app
     env_file: .env
     working_dir: /app
-    command: bash -c 'php artisan migrate && php artisan serve --host 127.0.0.1'
     depends_on:
       - db
     links:
@@ -18,7 +17,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=2468147aZ!!
       - MYSQL_DATABASE=testdb
-      - MYSQL_USER=root
       - MYSQL_PASSWORD=2468147aZ!!
     volumes:
       - ./data/:/var/lib/mysql
