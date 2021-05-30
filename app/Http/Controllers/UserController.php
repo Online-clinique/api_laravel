@@ -204,6 +204,13 @@ class UserController extends Controller
 
     public function me(Request $request)
     {
+        if (!$request['currentuser']) {
+            return response()->json([
+                'status' => 200,
+                'payload' => null
+            ]);
+        }
+
         return response()->json(
             [
                 'status' => 200,
