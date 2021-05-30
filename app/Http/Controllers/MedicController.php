@@ -10,6 +10,7 @@ use \Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\DB;
+use Mail;
 
 
 class MedicController extends Controller
@@ -122,6 +123,13 @@ class MedicController extends Controller
                 Str::uuid(), $request["currentuser"]->id, $request_hash, $data, "pending_metadata"
             ]
         );
+
+        Mail::raw("http://localhost:5500/dash/medic/$hash_tobe_sent", function ($message) use ($data) {
+            $message->from('belkamelmohamed@gmail.com', 'Mohamed Belkamel');
+            $message->to($data);
+            $message->subject('Email to de verification');
+            $message->priority(3);
+        });
 
         if (mail($data, 'Email to de verification', "http://localhost:5500/dash/medic/$hash_tobe_sent")) {
             DB::commit();
