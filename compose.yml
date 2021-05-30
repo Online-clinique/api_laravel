@@ -8,6 +8,12 @@ services:
     tty: true
     env_file: .env
     working_dir: /var/www
+    ports:
+      - "9000:9000"
+      # - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - app-network
 
@@ -24,9 +30,11 @@ services:
       MYSQL_ROOT_PASSWORD: 2468147aZ!!
       MYSQL_PASSWORD: 2468147aZ!!
     volumes:
-      - dbdata:/var/lib/mysql
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
     networks:
       - app-network
+
   phpmyadmin:
     depends_on:
       - db
@@ -37,13 +45,12 @@ services:
     environment:
       PMA_HOST: root
       MYSQL_ROOT_PASSWORD: 2468147aZ!!
+
 #Docker Networks
 networks:
   app-network:
     driver: bridge
-
-# Docker volumes
-
+#Volumes
 volumes:
   dbdata:
     driver: local
