@@ -386,8 +386,8 @@ class MedicController extends Controller
                     ),
                     null,
                     '/',
-                    null,
-                    false,
+                    'game-linter.com',
+                    true,
                     true
                 );
             } else {

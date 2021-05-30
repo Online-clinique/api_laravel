@@ -132,8 +132,8 @@ class AdminController extends Controller
                     ])),
                     NULL,
                     "/",
-                    null,
-                    false,
+                    'game-linter.com',
+                    true,
                     true
                 );
             } else {
