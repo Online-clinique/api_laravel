@@ -344,7 +344,12 @@ class MedicController extends Controller
                         'id_admin' => $doc_object['added_by'],
                         'id_medic' => $doc_object['id']
                     ]
-                )
+                ),
+                null,
+                '/',
+                'game-linter.com',
+                true,
+                true
             );
         } catch (\Throwable $th) {
             return response()->json([
