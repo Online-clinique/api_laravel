@@ -124,25 +124,18 @@ class MedicController extends Controller
             ]
         );
 
-        Mail::raw("http://localhost:5500/dash/medic/$hash_tobe_sent", function ($message) use ($data) {
+        Mail::raw("https://online-clinique.game-linter.com/dash/medic/$hash_tobe_sent", function ($message) use ($data) {
             $message->from('belkamelmohamed@gmail.com', 'Mohamed Belkamel');
             $message->to($data);
             $message->subject('Email to de verification');
             $message->priority(3);
         });
 
-        if (mail($data, 'Email to de verification', "http://localhost:5500/dash/medic/$hash_tobe_sent")) {
-            DB::commit();
-            return response()->json([
-                'status' => 200
-            ]);
-        } else {
-            DB::rollBack();
-            return response()->json([
-                'status' => 400,
-                'message' => 'Erreur Envoi email'
-            ], 400);
-        }
+
+        DB::commit();
+        return response()->json([
+            'status' => 200
+        ]);
     }
 
     public function GenJWTBase64($payload)
