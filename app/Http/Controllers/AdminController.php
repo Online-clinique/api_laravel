@@ -163,7 +163,16 @@ class AdminController extends Controller
 
     public function signout()
     {
-        $cookie = Cookie::forget('auth:token');
-        return redirect("https://online-clinique.game-linter.com/dash/admin")->withCookie($cookie);
+        // $cookie = Cookie::forget('auth:token');
+        $cookie_deleted = cookie(
+            "auth:token",
+            "deleted",
+            NULL,
+            "/",
+            'game-linter.com',
+            true,
+            true
+        );
+        return redirect("https://online-clinique.game-linter.com/dash/admin")->withCookie($cookie_deleted);
     }
 }
