@@ -24,7 +24,8 @@ class EnsureAdmin
             [
                 "status" => 401,
                 "message" => "Not Authorized"
-            ]
+            ],
+            401
         );
     }
 }
