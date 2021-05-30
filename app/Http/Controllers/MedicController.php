@@ -130,6 +130,10 @@ class MedicController extends Controller
             ]);
         } else {
             DB::rollBack();
+            return response()->json([
+                'status' => 400,
+                'message' => 'Erreur Envoi email'
+            ], 400);
         }
     }
 
